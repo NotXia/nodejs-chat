@@ -50,3 +50,7 @@
 .other-message > .message-text {
     text-align: left;
 }
+
+.update-message {
+    text-align: center;
+}

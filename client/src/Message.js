@@ -17,4 +17,20 @@ function OtherMessage(props) {
     );
 }
 
-export { OwnMessage, OtherMessage };
+function UserJoinMessage(props) {
+    return (
+        <div className="update-message">
+            <p>{props.user} has joined</p>
+        </div>
+    );
+}
+
+function UserQuitMessage(props) {
+    return (
+        <div className="update-message">
+            <p>{props.user} has quitted</p>
+        </div>
+    );
+}
+
+export { OwnMessage, OtherMessage, UserJoinMessage, UserQuitMessage };

@@ -7,31 +7,32 @@ const PORT = 80;
 
 app.use('/', express.static('client/build'));
 
-var connections = []
+var connections = {}
 
 io.on("connection", (socket) => {
     console.log("a user connected");
 
     socket.on("disconnect", () => {
         console.log("user disconnected");
+        if (connections[socket.id] != undefined) {
+            io.emit("user quit", connections[socket.id]);
+            connections[socket.id] = undefined;
+        }
     });
     
     /* Handles new users "login" */
     socket.on("new user", (username) => {
         let found = false;
-        connections.forEach(socket => {
-            if (socket.username === username) {
+        for (var socket_id in connections) {
+            if (connections[socket_id] === username) {
                 found = true;
-                return;
+                break;
             }
-        });
-        
+        }
         if (!found) {
-            connections.push({
-                socket: socket,
-                username: username
-            });
+            connections[socket.id] = username;
             socket.emit("new user", true);
+            io.emit("user join", username);
         }
         else {
             socket.emit("new user", false);

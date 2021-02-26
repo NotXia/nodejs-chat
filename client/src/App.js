@@ -17,10 +17,37 @@ class App extends React.Component {
             socket: io()
         };
 
+        this.state.socket.on("disconnect", () => {
+            this.setState({
+                curr_user: undefined,
+                socket: undefined
+            });
+        });
+
         /* Receives new messages from the server */
         this.state.socket.on("new message", (newMessage) => {
             this.setState({
                 messages: this.state.messages.concat(newMessage)
+            });
+        });
+
+        /* Notify when a new user joins */
+        this.state.socket.on("user join", (username) => {
+            this.setState({
+                messages: this.state.messages.concat({
+                    user: username,
+                    type: "join" 
+                })
+            });
+        });
+
+        /* Notify when a new user joins */
+        this.state.socket.on("user quit", (username) => {
+            this.setState({
+                messages: this.state.messages.concat({
+                    user: username,
+                    type: "quit"
+                })
             });
         });
     }

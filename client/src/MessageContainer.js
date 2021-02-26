@@ -1,6 +1,6 @@
 import React from 'react';
 import "./css/message.css";
-import { OwnMessage, OtherMessage } from "./Message";
+import { OwnMessage, OtherMessage, UserJoinMessage, UserQuitMessage } from "./Message";
 
 class MessageContainer extends React.Component {
     constructor(props) {
@@ -10,12 +10,22 @@ class MessageContainer extends React.Component {
     
     render() {
         const messages = this.props.messages;
-        const messagesComponents = messages.map((message) =>
-            message.user === this.props.curr_user ? 
-                <OwnMessage message={message.message} key={message.id}/> 
-            :
-                <OtherMessage user={message.user} message={message.message} key={message.id}/>
-        );
+        const messagesComponents = messages.map((message) => {
+            if (message.type == "join") {
+                return <UserJoinMessage user={message.user} />
+            }
+            else if (message.type == "quit") {
+                return <UserQuitMessage user={message.user} />
+            }
+            else {
+                if (message.user === this.props.curr_user) {
+                    return <OwnMessage message={message.message} key={message.id} /> 
+                }
+                else {
+                    return <OtherMessage user={message.user} message={message.message} key={message.id} />
+                }
+            }
+        });
         return (
             <div className="chat-box">
                 {messagesComponents}
