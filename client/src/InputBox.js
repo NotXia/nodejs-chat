@@ -25,7 +25,7 @@ class TextInput extends React.Component {
     render() {
         return (
             <form onSubmit={this.handleSubmit} className="message-form">
-                <div className="input-container">
+                <div className="message-input-container">
                     <input type="text" className="text-form" value={this.state.message} onChange={this.handleChange} />
                     <input type="submit" className="submit-button" value=">" onClick={this.handleSubmit}/>
                 </div>
