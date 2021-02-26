@@ -30,7 +30,11 @@ class App extends React.Component {
 
         this.state = { 
             curr_user: undefined,
-            messages: []
+            messages: [{
+                id: 2,
+                user: "User2",
+                message: "A very very very very very very very very very very very very very very very long message"
+            }]
         };
     }
 

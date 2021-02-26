@@ -1,3 +1,6 @@
+:root {
+    --borderRadius: 25px;
+}
 .chat-box {
     clear: both;
     display: block;
@@ -8,8 +11,8 @@
 .message-box {
     max-width: 60%;
     border: solid 1px #a5a5a5;
-    border-top-left-radius: 5em;
-    border-top-right-radius: 5em;
+    border-top-left-radius: var(--borderRadius);
+    border-top-right-radius: var(--borderRadius);
     padding-left: 2%;
     padding-right: 2%;
     margin: 0.5em;
@@ -18,17 +21,17 @@
 .own-message {
     clear: both;
     float: right;
-    border-bottom-left-radius: 5em;
+    border-bottom-left-radius: var(--borderRadius);
 }
 
 .other-message {
     clear: both;
     float: left;
-    border-bottom-right-radius: 5em;
+    border-bottom-right-radius: var(--borderRadius);
 }
 
 .user-text {
-    text-align: center;
+    text-align: right;
     font-weight: bold;
     margin: 0;
     margin-top: 0.2em;
@@ -39,6 +42,7 @@
     margin: 0;
     margin-top: 0.2em;
     margin-bottom: 0.2em;
+    overflow-wrap: break-word;
 }
 .own-message > .message-text {
     text-align: right;
