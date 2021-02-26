@@ -52,5 +52,6 @@
 }
 
 .update-message {
+    clear: both;
     text-align: center;
 }

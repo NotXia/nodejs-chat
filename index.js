@@ -22,6 +22,7 @@ io.on("connection", (socket) => {
     
     /* Handles new users "login" */
     socket.on("new user", (username) => {
+        /* Checks if the username is already taken */
         let found = false;
         for (var socket_id in connections) {
             if (connections[socket_id] === username) {
@@ -29,6 +30,7 @@ io.on("connection", (socket) => {
                 break;
             }
         }
+        
         if (!found) {
             connections[socket.id] = username;
             socket.emit("new user", true);

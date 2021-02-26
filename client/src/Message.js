@@ -28,7 +28,7 @@ function UserJoinMessage(props) {
 function UserQuitMessage(props) {
     return (
         <div className="update-message">
-            <p>{props.user} has quitted</p>
+            <p>{props.user} has quit</p>
         </div>
     );
 }

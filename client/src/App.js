@@ -20,7 +20,7 @@ class App extends React.Component {
         this.state.socket.on("disconnect", () => {
             this.setState({
                 curr_user: undefined,
-                socket: undefined
+                message: []
             });
         });
 
@@ -84,7 +84,7 @@ class App extends React.Component {
         /* If the user connects for the first time (in this session), it prompts a modal for the authentication */
         if(this.state.curr_user === undefined) {
             return (
-                <Popup onSubmitClick={this.handleUsernameSubmitClick}/>
+                <Popup onSubmitClick={this.handleUsernameSubmitClick} />
             )
         }
         /* Otherwise it displays the chat. */
@@ -92,7 +92,7 @@ class App extends React.Component {
             return (
                 <div className="container">
                     <MessageContainer curr_user={this.state.curr_user} messages={ this.state.messages } />
-                    <InputBox onSubmitClick={this.handleMessageSubmitClick}/>
+                    <InputBox onSubmitClick={this.handleMessageSubmitClick} />
                 </div>
             );
         }
