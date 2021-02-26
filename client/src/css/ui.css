@@ -1,0 +1,31 @@
+* {
+    font-family: Raleway;
+}
+
+body {
+    margin: 0;
+    background-color: #363636;
+    color: #c0c0c0;
+}
+
+.container {
+    width: 60vw;
+    height: 100vh;
+    margin: auto;
+}
+
+
+/* tablets and desktop */
+@media only screen and (min-width: 768px) {
+    .container {
+        width: 45vw;
+    }
+}
+
+/* phones */
+@media only screen and (max-width: 767px) {
+    .container {
+        width: 99vw;
+        height: 90vh;
+    }
+}
