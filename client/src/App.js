@@ -3,24 +3,7 @@ import MessageContainer from "./MessageContainer";
 import InputBox from "./InputBox";
 import Popup from "./Popup";
 import "./css/ui.css";
-
-/*
-{
-    id: 1,
-    user: "User1",
-    message: "Message"
-},
-{
-    id: 2,
-    user: "User2",
-    message: "A very very very very very very very very very very very very very very very long message"
-},
-{
-    id: 3,
-    user: "Current user",
-    message: "Hello"
-}
-*/
+import io from 'socket.io-client'
 
 class App extends React.Component {
     constructor(props) {
@@ -30,49 +13,54 @@ class App extends React.Component {
 
         this.state = { 
             curr_user: undefined,
-            messages: [{
-                id: 2,
-                user: "User2",
-                message: "A very very very very very very very very very very very very very very very long message"
-            }]
+            messages: [],
+            socket: io()
         };
-    }
 
-    componentDidMount() {
-
-    }
-        
-    componentWillUnmount() {
-
+        /* Receives new messages from the server */
+        this.state.socket.on("new message", (newMessage) => {
+            this.setState({
+                messages: this.state.messages.concat(newMessage)
+            });
+        });
     }
     
     handleMessageSubmitClick(newMessage) {
         if (newMessage.length > 0) {
-            this.setState({
-                messages: this.state.messages.concat(
-                {
-                    id: 3,
-                    user: this.state.curr_user,
-                    message: newMessage
-                }
-            )});
+            /* Sends the new message to the server */
+            this.state.socket.emit('new message', {
+                id: undefined,
+                user: this.state.curr_user,
+                message: newMessage,
+                timestamp: Date.now()
+            });
         }
     }    
 
     handleUsernameSubmitClick(username) {
         if (username.length > 0) {
-            this.setState({
-                curr_user: username
+            /* Sends the chosen username to the server */
+            this.state.socket.emit('new user', username);
+
+            /* Waits for the server's reply (it checks if the username is currently taken) */
+            this.state.socket.on("new user", (reply) => {
+                if (reply == true) {
+                    this.setState({
+                        curr_user: username
+                    });
+                }
             });
         }
     }    
 
     render() {
+        /* If the user connects for the first time (in this session), it prompts a modal for the authentication */
         if(this.state.curr_user === undefined) {
             return (
                 <Popup onSubmitClick={this.handleUsernameSubmitClick}/>
             )
         }
+        /* Otherwise it displays the chat. */
         else {
             return (
                 <div className="container">

@@ -1,9 +1,50 @@
 var express = require('express');
-
 var app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const PORT = 80;
+
 
 app.use('/', express.static('client/build'));
 
-app.listen(3000, function () {
-    console.log('http://localhost:3000');
+var connections = []
+
+io.on("connection", (socket) => {
+    console.log("a user connected");
+
+    socket.on("disconnect", () => {
+        console.log("user disconnected");
+    });
+    
+    /* Handles new users "login" */
+    socket.on("new user", (username) => {
+        let found = false;
+        connections.forEach(socket => {
+            if (socket.username === username) {
+                found = true;
+                return;
+            }
+        });
+        
+        if (!found) {
+            connections.push({
+                socket: socket,
+                username: username
+            });
+            socket.emit("new user", true);
+        }
+        else {
+            socket.emit("new user", false);
+        }
+    });
+
+    /* Handles new messages */
+    socket.on("new message", (message) => {
+        /* Broadcasts to everyone */
+        io.emit("new message", message);
+    });
+});
+
+http.listen(PORT, function () {
+    console.log(`http://localhost:${PORT}`);
 });
