@@ -28,7 +28,7 @@ class Popup extends React.Component {
                         <input type="text" className="username-input" value={this.state.username} onChange={this.handleChange} />
                     </label>
                     <br/>
-                    <input type="submit" className="username-submit" value="Confirm" onClick={this.handleSubmit} />
+                    <input type="submit" className="username-submit" value="Join" onClick={this.handleSubmit} />
                 </div>
             </form>
         );

@@ -1,4 +1,5 @@
 module.exports = new class {
+    /* Inserts a new user */
     user(username) {
         const db = require("./connect");
         let stmt = db.prepare("INSERT INTO users (username) VALUES (?)");
@@ -13,6 +14,7 @@ module.exports = new class {
         });
     };
 
+    /* Inserts a new message */
     message(messageDescription) {
         const db = require("./connect");
         let stmt = db.prepare(`

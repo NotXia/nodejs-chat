@@ -15,10 +15,12 @@ require('./api/api')(app);
 
 var connections = {}
 io.on("connection", (socket) => {
-    console.log("a user connected");
+    console.log("New client connected");
 
     socket.on("disconnect", () => {
-        console.log("user disconnected");
+        console.log("A client disconnected");
+
+        /* Removes the username linked to the socket */
         if (connections[socket.id] != undefined) {
             io.emit("user quit", connections[socket.id]);
             connections[socket.id] = undefined;
@@ -41,7 +43,7 @@ io.on("connection", (socket) => {
             connections[socket.id] = username; // Links the socket to the username
             socket.emit("new user", true);     // Replies to the new client (username available)
             io.emit("user join", username);    // Broadcasts the new user"s name
-            db_insert.user(username);
+            db_insert.user(username);          // Inserts the username in the db
         }
         else {
             socket.emit("new user", false); // Replies to the new client (username not available)
@@ -52,7 +54,7 @@ io.on("connection", (socket) => {
     socket.on("new message", (messageDescription) => {
         if (messageDescription.type === "message" && messageDescription.user === connections[socket.id]) { // Validates the message
             io.emit("new message", messageDescription); // Broadcasts the message
-            db_insert.message(messageDescription);
+            db_insert.message(messageDescription);      // Inserts the message in the db
         }
     });
 });

@@ -17,6 +17,7 @@ class App extends React.Component {
             socket: io()
         };
 
+        /* Handles the disconnection */
         this.state.socket.on("disconnect", () => {
             this.setState({
                 curr_user: undefined,
@@ -58,6 +59,7 @@ class App extends React.Component {
         });
     }
     
+    /* Triggers when the user sends a message */
     handleMessageSubmitClick(newMessage) {
         if (newMessage.length > 0) {
             /* Sends the new message to the server */
@@ -71,6 +73,7 @@ class App extends React.Component {
         }
     }    
 
+    /* Triggers when the user submits the username */
     handleUsernameSubmitClick(username) {
         if (username.length > 0) {
             /* Sends the chosen username to the server */
@@ -85,7 +88,7 @@ class App extends React.Component {
                     
                     /* Fetches all the old messages */
                     let app = this;
-                    fetch("http://localhost/api/messages")
+                    fetch("../../api/messages")
                         .then(function (response) {
                             return response.json()
                         }).then(function (data) {
