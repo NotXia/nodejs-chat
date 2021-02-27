@@ -16,8 +16,8 @@ npm start
 It will build the React app before starting the server.
 
 ## How it works
-Each client is identified by a username promted at the beginning of the session.
-Every message is broadcasted to the connected clients.
+Each client is identified by a username prompted at the beginning of the session. Other clients won't be able to connect if they try to use an username that is already connected. <br/>
+Every message will be broadcasted to all the clients.
 
 ## Stored messages
 All messages are saved in the local database, as well as the usernames.
