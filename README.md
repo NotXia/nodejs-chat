@@ -1,4 +1,4 @@
-# Chat web-app
+# NodeJS Chat
 
 ## Description
 A chat application built with NodeJS and React.
