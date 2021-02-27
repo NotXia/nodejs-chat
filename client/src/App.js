@@ -26,29 +26,35 @@ class App extends React.Component {
 
         /* Receives new messages from the server */
         this.state.socket.on("new message", (newMessage) => {
-            this.setState({
-                messages: this.state.messages.concat(newMessage)
-            });
+            if (this.state.curr_user != undefined) {
+                this.setState({
+                    messages: this.state.messages.concat(newMessage)
+                });
+            }
         });
 
         /* Notify when a new user joins */
         this.state.socket.on("user join", (username) => {
-            this.setState({
-                messages: this.state.messages.concat({
-                    user: username,
-                    type: "join" 
-                })
-            });
+            if (this.state.curr_user != undefined) {
+                this.setState({
+                    messages: this.state.messages.concat({
+                        user: username,
+                        type: "join"
+                    })
+                });
+            }
         });
 
-        /* Notify when a new user joins */
+        /* Notify when a new user quits */
         this.state.socket.on("user quit", (username) => {
-            this.setState({
-                messages: this.state.messages.concat({
-                    user: username,
-                    type: "quit"
-                })
-            });
+            if (this.state.curr_user != undefined) {
+                this.setState({
+                    messages: this.state.messages.concat({
+                        user: username,
+                        type: "quit"
+                    })
+                });
+            }
         });
     }
     
@@ -59,7 +65,8 @@ class App extends React.Component {
                 id: undefined,
                 user: this.state.curr_user,
                 message: newMessage,
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                type: "message"
             });
         }
     }    

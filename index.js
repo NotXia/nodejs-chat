@@ -8,7 +8,6 @@ const PORT = 80;
 app.use('/', express.static('client/build'));
 
 var connections = {}
-
 io.on("connection", (socket) => {
     console.log("a user connected");
 
@@ -23,28 +22,30 @@ io.on("connection", (socket) => {
     /* Handles new users "login" */
     socket.on("new user", (username) => {
         /* Checks if the username is already taken */
-        let found = false;
-        for (var socket_id in connections) {
-            if (connections[socket_id] === username) {
-                found = true;
-                break;
+        const exists = (toFindUsername) => {
+            for (var socket_id in connections) {
+                if (connections[socket_id] === toFindUsername) {
+                    return true;
+                }
             }
+            return false;
         }
         
-        if (!found) {
-            connections[socket.id] = username;
-            socket.emit("new user", true);
-            io.emit("user join", username);
+        if (!exists(username)) {
+            connections[socket.id] = username; // Links the socket to the username
+            socket.emit("new user", true);     // Replies to the new client (username available)
+            io.emit("user join", username);    // Broadcasts the new user's name
         }
         else {
-            socket.emit("new user", false);
+            socket.emit("new user", false); // Replies to the new client (username not available)
         }
     });
 
     /* Handles new messages */
     socket.on("new message", (message) => {
-        /* Broadcasts to everyone */
-        io.emit("new message", message);
+        if (message.type === "message" && message.user === connections[socket.id]) { // Validates the message
+            io.emit("new message", message); // Broadcasts the message
+        }
     });
 });
 
