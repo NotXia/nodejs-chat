@@ -29,24 +29,31 @@ class MessageContainer extends React.Component {
     }
 
     render() {
-        const messages = this.props.messages;
-        const messagesComponents = messages.map((message, i) => {
-            switch (message.type) {
-                case "join":
-                    return <UserJoinMessage user={message.user} key={i} />
+        let messagesComponents = undefined;
 
-                case "quit":
-                    return <UserQuitMessage user={message.user} key={i} />
-
-                default:
-                    if (message.user === this.props.curr_user) {
-                        return <OwnMessage message={message.message} key={i} /> 
-                    }
-                    else {
-                        return <OtherMessage user={message.user} message={message.message} key={i} />
-                    }
-            }
-        });
+        try {
+            const messages = this.props.messages;
+            messagesComponents = messages.map((message, i) => {
+                switch (message.type) {
+                    case "join":
+                        return <UserJoinMessage user={message.user} key={i} />
+    
+                    case "quit":
+                        return <UserQuitMessage user={message.user} key={i} />
+    
+                    default:
+                        if (message.user === this.props.curr_user) {
+                            return <OwnMessage message={message.message} key={i} /> 
+                        }
+                        else {
+                            return <OtherMessage user={message.user} message={message.message} key={i} />
+                        }
+                }
+            });
+        }
+        catch (error) {
+            console.log(error);
+        }
 
         return (
             <div className="chat-box" ref={(el) => { this.chatBox = el; }} >

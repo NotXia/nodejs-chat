@@ -1,11 +1,17 @@
-var express = require('express');
+var express = require("express");
 var app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const path = require("path");
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
 const PORT = 80;
 
+require("./db/create");
+const db_insert = require("./db/insert");
 
-app.use('/', express.static('client/build'));
+app.use("/", express.static(path.join(__dirname, "client/build")));
+
+require('./api/api')(app);
+
 
 var connections = {}
 io.on("connection", (socket) => {
@@ -34,7 +40,8 @@ io.on("connection", (socket) => {
         if (!exists(username)) {
             connections[socket.id] = username; // Links the socket to the username
             socket.emit("new user", true);     // Replies to the new client (username available)
-            io.emit("user join", username);    // Broadcasts the new user's name
+            io.emit("user join", username);    // Broadcasts the new user"s name
+            db_insert.user(username);
         }
         else {
             socket.emit("new user", false); // Replies to the new client (username not available)
@@ -42,9 +49,10 @@ io.on("connection", (socket) => {
     });
 
     /* Handles new messages */
-    socket.on("new message", (message) => {
-        if (message.type === "message" && message.user === connections[socket.id]) { // Validates the message
-            io.emit("new message", message); // Broadcasts the message
+    socket.on("new message", (messageDescription) => {
+        if (messageDescription.type === "message" && messageDescription.user === connections[socket.id]) { // Validates the message
+            io.emit("new message", messageDescription); // Broadcasts the message
+            db_insert.message(messageDescription);
         }
     });
 });

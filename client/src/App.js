@@ -78,10 +78,19 @@ class App extends React.Component {
 
             /* Waits for the server's reply (it checks if the username is currently taken) */
             this.state.socket.on("new user", (reply) => {
-                if (reply == true) {
+                if (reply == true) { // Username available
                     this.setState({
                         curr_user: username
                     });
+                    
+                    /* Fetches all the old messages */
+                    let app = this;
+                    fetch("http://localhost/api/messages")
+                        .then(function (response) {
+                            return response.json()
+                        }).then(function (data) {
+                            app.setState({ messages: data });
+                        });
                 }
             });
         }
