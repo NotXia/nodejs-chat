@@ -20,5 +20,5 @@ Each client is identified by a username prompted at the beginning of the session
 Every message will be broadcasted to all the clients.
 
 ## Stored messages
-All messages are saved in the local database, as well as the usernames.
+All messages and usernames are saved in the local database.
 To reset the storage, delete the `messages.db` file in the `./db` folder.
